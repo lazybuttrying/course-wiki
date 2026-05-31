@@ -1,0 +1,33 @@
+name: lint
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  wiki-lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Lint the template-vault skeleton
+        run: python3 scripts/lint.py template-vault --report lint-report.md
+      - name: Upload lint report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: lint-report
+          path: lint-report.md
+      - name: Smoke-test bootstrap.sh
+        run: |
+          bash bootstrap.sh -c "Demo Course" -v /tmp/Demo-wiki \
+            -s "../sources/" -u lecture -m on -e on
+          test -f /tmp/Demo-wiki/CLAUDE.md
+          grep -q "Demo Course" /tmp/Demo-wiki/index.md
+          # generated CLAUDE.md must not retain the bootstrap-only block
+          ! grep -q "BOOTSTRAP:START" /tmp/Demo-wiki/CLAUDE.md
+          python3 scripts/lint.py /tmp/Demo-wiki

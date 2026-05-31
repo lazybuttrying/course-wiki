@@ -1,0 +1,16 @@
+# wiki.config.example.yml — 새 수업 설정 예시.
+# bootstrap.sh 가 vault에 wiki.config.yml 을 자동 생성하지만,
+# 플래그 대신 이 파일을 채워두고 참고용으로 쓸 수도 있다.
+
+course: "Causal Inference"          # 수업 이름 (= {{COURSE}})
+vault: "Causality-wiki"             # vault 폴더명 (= {{VAULT}})
+source_dirs: "../../course_files_export/"   # immutable 소스 경로 (= {{SOURCE_DIRS}})
+source_types: "lecture slides · 필기 · 본인 정리"   # 소스 형태 (= {{SOURCE_TYPES}})
+unit: "lecture"                     # chapter | week | lecture | module | paper (= {{UNIT}})
+keep_english_terms: "on"            # 기술 용어 English 원단어 유지 (= {{KEEP_ENGLISH_TERMS}})
+math: "on"                          # LaTeX 수식 모듈 (= {{MATH}})
+
+# 예시 bootstrap 호출:
+#   ./bootstrap.sh -c "Causal Inference" -v ../class/causality/wiki/Causality-wiki \
+#                  -s "../../course_files_export/" -u lecture -m on -e on \
+#                  -t "lecture slides · 필기 · 본인 정리"

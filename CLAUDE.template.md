@@ -1,3 +1,4 @@
+<!-- BOOTSTRAP:START -->
 <!--
   ┌─────────────────────────────────────────────────────────────────────┐
   │  COURSE-WIKI HARNESS  ·  self-contained schema for an LLM-maintained  │
@@ -10,15 +11,26 @@
   │  the placeholders.                                                    │
   └─────────────────────────────────────────────────────────────────────┘
 -->
+<!-- BOOTSTRAP:END -->
 
 # {{COURSE}}-wiki 스키마 (LLM Wiki 유지 규칙)
 
 이 볼트는 Andrej Karpathy의 **"LLM Wiki"** 패턴을 따른다. 이 파일은 LLM이 일반 챗봇이 아니라 **규율 있는 위키 관리자**로 동작하게 하는 설정 파일이다. 위키를 만들거나 확장할 때 아래 규칙을 따른다.
 
+<!-- BOOTSTRAP:START — bootstrap.sh 가 인스턴스 vault 생성 시 이 블록(아래 --- 포함)을 제거한다 -->
+
 ---
 
-## ⚡ Bootstrap — 새 수업 위키 시작 (4단계)
+## ⚡ Bootstrap — 새 수업 위키 시작
 
+**자동 (권장)** — harness repo에서 한 명령:
+```bash
+./bootstrap.sh -c "Causal Inference" -v ../class/causality/wiki/Causality-wiki \
+               -s "../../course_files_export/" -u lecture -m on -e on
+```
+→ `template-vault/` 복사 + `{{placeholder}}` 치환 + 날짜 스탬프 + `wiki.config.yml` 기록. 이후 Ingest만 하면 된다.
+
+**수동 (4단계)**:
 1. **vault 생성**: `<course>/wiki/{{VAULT}}/` 폴더를 만들고 이 파일을 그 안에 `CLAUDE.md` 로 복사.
 2. **placeholder 치환**: 아래 표의 `{{...}}` 를 모두 실제 값으로 바꾼다. (한 번만)
 3. **소스 연결**: immutable 원본을 `{{SOURCE_DIRS}}` 에 두고(또는 경로만 가리키고) 절대 수정하지 않는다.
@@ -38,6 +50,8 @@
 | `{{MATH}}` | LaTeX 수식 모듈 | `on` (STEM) / `off` (인문·정책 등) |
 
 > `{{UNIT}}` 이 `chapter` 가 아니면 `chapters/` 폴더를 그 이름(예 `weeks/`)으로 바꾸고, 아래 graph 색상 쿼리·lint 인자도 같이 바꾼다.
+
+<!-- BOOTSTRAP:END -->
 
 ---
 
@@ -128,3 +142,42 @@ magick "hi-<N>.png" -crop 1620x900+50+40 +repage fig.png
 - **잘 맞음**: 소스가 고정·구조적이고(교재·강의), 누적적으로 한 학기 지식을 쌓을 때. LLM이 bookkeeping(요약·상호참조·lint)을 지치지 않고 해준다.
 - **과할 수 있음**: 소스가 단 1~2개거나 일회성 정리면 위키 인프라(index/log/concept 분리)는 오버헤드 — 그냥 단일 문서가 낫다.
 - **모순 플래그**는 이질 소스에서만 가치 있음(부록 4 참고). 단일 교재면 끄고 open question만 써라.
+
+---
+
+## 부록 E — 페이지 예시 & Ingest/Query worked example
+페이지 스켈레톤은 `template-vault/_templates/`(chapter·concept·topic·cheatsheet)에 있다. 복사해 채운다. 최소 예시:
+
+**chapter** (`chapters/L1 - Association vs Causation.md`)
+```markdown
+---
+tags: [Causal-Inference, lecture, association]
+aliases: ["Lecture 1", "Association vs Causation"]
+type: chapter
+chapter: 1
+source: "../../course_files_export/1. Association vs causation.pdf"
+updated: 2026-05-31
+---
+# L1 — Association vs Causation
+> source: 〔Lecture 1〕 · 종합: [[Cheat Sheet]] · 개념: [[Exchangeability]]
+- RD $=\Pr(Y{=}1\mid A{=}1)-\Pr(Y{=}1\mid A{=}0)$ …
+## 관련 노트
+- 개념: [[Exchangeability]] · 다음: [[L2 - …]] · 목차: [[index]]
+```
+**concept** (`concepts/Exchangeability.md`) — chapter를 역으로 링크(양방향):
+```markdown
+---
+type: concept
+tags: [Causal-Inference, concept, exchangeability]
+aliases: ["Exchangeability", "ignorability"]
+updated: 2026-05-31
+---
+# Concept — Exchangeability
+## 어디서 쓰이나
+- [[L1 - Association vs Causation]]: association=causation 조건.
+- [[L2 - …]]: randomization이 보장.
+```
+
+**Ingest (worked)**: 소스/정리노트 통독 → ① `chapters/L1` 작성 → ② `index.md` 의 chapters 섹션에 한 줄 추가 → ③ 새 개념 `Exchangeability`가 나왔으니 `concepts/Exchangeability` 생성하고 L1↔concept 양방향 링크 → ④ `summary/Cheat Sheet` 해당 항목 추가 → ⑤ `log.md` 에 `## [날짜] ingest | L1` 기록 → ⑥ `lint.py` 로 점검. (한 소스가 5~10개 페이지를 건드린다.)
+
+**Query (worked)**: "exchangeability랑 positivity 차이?" → `concepts/Exchangeability`·`chapters/L2-2` 검색·종합 → **출처 인용**과 함께 답 → 자주 묻는 비교면 `concepts/Identification Conditions` 같은 새 페이지로 적재해 누적.
