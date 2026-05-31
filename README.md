@@ -13,17 +13,23 @@ Andrej Karpathy의 [**LLM Wiki**](https://gist.github.com/karpathy/442a6bf555914
 | `scripts/lint.py` | 위키 health-check (끊긴 링크·orphan·back-link 비대칭·frontmatter·page 없는 용어). |
 | `scripts/crop-figures.md` | PDF 그림 크롭→임베드 레시피 (STEM/PDF 옵션). |
 
+> 이 repo는 수업 콘텐츠와 **분리된 별도 디렉터리**다 (기본 위치 `~/Desktop/project/course-wiki-harness/`). 아래 명령은 repo 루트에서 실행한다. `HARNESS` 를 이 repo 경로로 둔다.
+
 ## 빠른 시작 (새 수업)
 ```bash
-# 1) 스켈레톤 복사
-cp -R wiki-harness/template-vault  <course>/wiki/<Course>-wiki
+HARNESS=~/Desktop/project/course-wiki-harness     # 이 repo 위치
 
-# 2) 스키마를 vault의 CLAUDE.md로 (template-vault에 stub이 있으면 덮어씀)
-cp wiki-harness/CLAUDE.template.md  <course>/wiki/<Course>-wiki/CLAUDE.md
+# 1) 스켈레톤 복사
+cp -R "$HARNESS/template-vault"  <course>/wiki/<Course>-wiki
+
+# 2) 스키마를 vault의 CLAUDE.md로 (template-vault의 stub을 덮어씀)
+cp "$HARNESS/CLAUDE.template.md"  <course>/wiki/<Course>-wiki/CLAUDE.md
 
 # 3) <Course>-wiki/CLAUDE.md 안의 {{PLACEHOLDER}} 치환  (COURSE, VAULT, SOURCE_DIRS, UNIT, MATH ...)
 
 # 4) LLM에게: "이 CLAUDE.md 스키마대로 <소스>를 ingest 해줘"
+
+# (이후) lint:  python3 "$HARNESS/scripts/lint.py"  <course>/wiki/<Course>-wiki
 ```
 그 다음부터 LLM이 **Ingest / Query / Lint** 워크플로우로 위키를 키운다. 자세한 규칙은 `CLAUDE.template.md` 본문 참조.
 
@@ -40,11 +46,11 @@ cp wiki-harness/CLAUDE.template.md  <course>/wiki/<Course>-wiki/CLAUDE.md
 ```
 
 ## GitHub template으로 관리하기
-이 폴더(`wiki-harness/`)를 그대로 GitHub template repo로 쓸 수 있다.
+이 repo는 이미 `git init` + 초기 커밋이 되어 있다(수업 콘텐츠와 분리된 독립 저장소). GitHub에 올리려면:
 ```bash
-cd wiki-harness
-git init && git add -A && git commit -m "Course-wiki harness v1"
-gh repo create <you>/course-wiki-harness --public --source=. --push   # gh CLI 사용 시
+cd ~/Desktop/project/course-wiki-harness
+gh repo create <you>/course-wiki-harness --public --source=. --push   # gh CLI
+# 또는 수동: git remote add origin <url> && git push -u origin main
 ```
 그 다음 GitHub repo **Settings → Template repository** 체크. 이후:
 - 웹: **"Use this template"** → 새 수업 repo 생성.
