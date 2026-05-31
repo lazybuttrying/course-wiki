@@ -1,0 +1,125 @@
+#!/usr/bin/env python3
+"""
+Course-wiki lint — health-check for an LLM-maintained Obsidian course wiki.
+
+Usage:
+    python3 lint.py [VAULT_DIR] [--concepts concepts] [--chapters chapters]
+
+Checks (Karpathy "LLM Wiki" Lint operation):
+  1. broken wikilinks / image embeds
+  2. orphan pages (no inbound link; landing 'Welcome' exempt)
+  3. back-link asymmetry  (concept -> chapter exists, chapter -> concept missing)
+  4. frontmatter missing  (type / updated / tags)
+  5. heavily-mentioned terms without their own page (heuristic, informational)
+  6. open questions / conflicts (data gaps)
+
+No dependencies beyond the standard library. Exits non-zero if hard problems
+(broken links/embeds, frontmatter gaps, back-link gaps) are found.
+"""
+import os, re, sys, glob, argparse
+
+def main():
+    ap = argparse.ArgumentParser()
+    ap.add_argument("vault", nargs="?", default=".", help="vault directory")
+    ap.add_argument("--concepts", default="concepts", help="concepts folder name")
+    ap.add_argument("--chapters", default="chapters", help="per-source folder name")
+    ap.add_argument("--terms", default="", help="comma-list of key terms to check for missing pages")
+    args = ap.parse_args()
+    root = args.vault.rstrip("/")
+
+    md = [p for p in glob.glob(f"{root}/**/*.md", recursive=True) if ".obsidian" not in p]
+    if not md:
+        print(f"no markdown found under {root!r}"); sys.exit(2)
+    images = {os.path.basename(p) for p in glob.glob(f"{root}/attachments/*")}
+    base = lambda p: os.path.splitext(os.path.basename(p))[0]
+    rel  = lambda p: os.path.relpath(p, root)
+
+    # name set (basenames + aliases) and frontmatter
+    names, alias2file, fm = set(), {}, {}
+    ar = re.compile(r"aliases:\s*\[(.*?)\]")
+    field = lambda txt, k: (re.search(rf"^{k}:\s*(.+)$", txt, re.M) or [None, None])[1]
+    for p in md:
+        b = base(p); names.add(b); txt = open(p, encoding="utf-8").read()
+        fm[b] = {"type": field(txt, "type"), "updated": field(txt, "updated"),
+                 "tags": "tags:" in txt}
+        m = ar.search(txt)
+        if m:
+            for a in (x.strip().strip("\"'") for x in m.group(1).split(",")):
+                if a: names.add(a); alias2file[a] = b
+    canon = lambda t: alias2file.get(t, t)
+
+    wl = re.compile(r"(!?)\[\[([^\]|#]+)(?:#[^\]|]*)?(?:\|[^\]]*)?\]\]")
+    SKIP = {"링크", "페이지명", "create a link", "name", "<page>"}  # doc placeholders
+    links, broken, broken_img, inbound = {}, set(), set(), {}
+    for p in md:
+        b = base(p); outs = set()
+        raw = open(p, encoding="utf-8").read()
+        raw = re.sub(r"<!--.*?-->", "", raw, flags=re.S)   # drop HTML comments
+        txt = re.sub(r"`[^`]*`", "", raw)                  # drop code spans
+        for bang, t in wl.findall(txt):
+            t = t.strip()
+            if bang == "!":
+                if t.lower().endswith((".png", ".jpg", ".jpeg", ".gif", ".svg")) and t not in images:
+                    broken_img.add(f"{rel(p)} → ![[{t}]]")
+                continue
+            if t in SKIP: continue
+            if t not in names:
+                broken.add(f"{rel(p)} → [[{t}]]"); continue
+            c = canon(t); outs.add(c); inbound[c] = inbound.get(c, 0) + 1
+        links[b] = outs
+
+    def section(title): print(f"\n=== {title} ===")
+    hard = 0
+
+    section("1) broken wikilink / image embed")
+    if broken or broken_img:
+        for x in sorted(broken): print("  broken link:", x)
+        for x in sorted(broken_img): print("  broken embed:", x)
+        hard += len(broken) + len(broken_img)
+    else: print("  0 ✅")
+
+    section("2) orphan (inbound 0)")
+    orphans = sorted(b for b in {base(p) for p in md} if b not in inbound and b != "Welcome")
+    print("  ", orphans or "none ✅")
+
+    section("3) back-link asymmetry (concept↔chapter)")
+    concepts = [base(p) for p in md if f"/{args.concepts}/" in p or p.startswith(f"{root}/{args.concepts}/")]
+    chapters = [base(p) for p in md if f"/{args.chapters}/" in p or p.startswith(f"{root}/{args.chapters}/")]
+    gaps = [(ch, c) for c in concepts for ch in links.get(c, ()) if ch in chapters and c not in links.get(ch, set())]
+    if gaps:
+        for ch, c in sorted(gaps): print(f"  {ch}  ⟶ missing ⟵  [[{c}]]")
+        hard += len(gaps)
+    else: print("  0 ✅")
+
+    section("4) frontmatter missing (type/updated/tags)")
+    fmgaps = [b for b in (base(p) for p in md) if b != "Welcome"
+              and (not fm[b]["type"] or not fm[b]["updated"] or not fm[b]["tags"])]
+    if fmgaps:
+        for b in fmgaps: print("  ", b, [k for k in ("type", "updated", "tags") if not fm[b][k]])
+        hard += len(fmgaps)
+    else: print("  0 ✅")
+
+    section("5) key terms without own page (informational)")
+    terms = [t.strip() for t in args.terms.split(",") if t.strip()]
+    if terms:
+        alltxt = " ".join(open(p, encoding="utf-8").read() for p in md)
+        for t in terms:
+            if not any(t.lower() in n.lower() for n in names):
+                n = len(re.findall(re.escape(t), alltxt))
+                if n: print(f"  '{t}': {n} mentions, no page")
+    else: print("  (pass --terms a,b,c to check)")
+
+    section("6) open questions / conflicts (data gaps)")
+    found = False
+    for p in md:
+        for ln in open(p, encoding="utf-8"):
+            if "open question" in ln.lower() or "conflict" in ln.lower() or "❓" in ln or "⚠️" in ln:
+                print(f"  {base(p)}: {ln.strip()[:90]}"); found = True
+    if not found: print("  none")
+
+    print(f"\nsummary: {len(md)} md, {len(images)} images, "
+          f"{len(concepts)} concepts, {len(chapters)} chapters | hard issues: {hard}")
+    sys.exit(1 if hard else 0)
+
+if __name__ == "__main__":
+    main()

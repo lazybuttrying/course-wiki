@@ -1,0 +1,13 @@
+# OS
+.DS_Store
+Thumbs.db
+
+# Obsidian — per-machine UI state (keep graph.json, app.json, appearance.json)
+.obsidian/workspace.json
+.obsidian/workspace-mobile.json
+.obsidian/cache
+.trash/
+
+# scratch
+/tmp/
+*.tmp

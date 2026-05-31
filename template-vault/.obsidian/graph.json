@@ -1,0 +1,39 @@
+{
+  "collapse-filter": true,
+  "search": "",
+  "showTags": false,
+  "showAttachments": false,
+  "hideUnresolved": false,
+  "showOrphans": true,
+  "collapse-color-groups": false,
+  "colorGroups": [
+    {
+      "query": "path:\"summary/\"",
+      "color": { "a": 1, "rgb": 16347926 }
+    },
+    {
+      "query": "path:concepts/",
+      "color": { "a": 1, "rgb": 2278750 }
+    },
+    {
+      "query": "path:chapters/",
+      "color": { "a": 1, "rgb": 3900150 }
+    },
+    {
+      "query": "path:topics/",
+      "color": { "a": 1, "rgb": 11032055 }
+    }
+  ],
+  "collapse-display": true,
+  "showArrow": false,
+  "textFadeMultiplier": 0,
+  "nodeSizeMultiplier": 1,
+  "lineSizeMultiplier": 1,
+  "collapse-forces": true,
+  "centerStrength": 0.5,
+  "repelStrength": 10,
+  "linkStrength": 1,
+  "linkDistance": 250,
+  "scale": 1,
+  "close": true
+}
