@@ -3,6 +3,8 @@
 #
 #   ./bootstrap.sh -c "Causal Inference" -v ../class/causality/wiki/Causality-wiki \
 #                  -s "../../course_files_export/" -u lecture -m on -e on
+#   (optional) -S ../class/causality/sources   # vault 옆에 sources/ 골격 생성
+#                  → textbook/readings/slides/notes-raw/notes-clean/hw/exams
 #
 # Copies template-vault → <vault>, generates CLAUDE.md from CLAUDE.template.md
 # (strips the BOOTSTRAP block), substitutes {{placeholders}} in the meta files,
@@ -11,12 +13,13 @@
 set -euo pipefail
 
 REPO="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-COURSE=""; VAULT=""; SRC=""; UNIT="chapter"; MATH="on"; TERMS="on"; TYPES="PDF · slides · notes"
+COURSE=""; VAULT=""; SRC=""; UNIT="chapter"; MATH="on"; TERMS="on"; TYPES="PDF · slides · notes"; SCAFFOLD=""
 
-usage() { sed -n '2,12p' "$0"; exit 1; }
-while getopts "c:v:s:u:m:e:t:h" o; do case "$o" in
+usage() { sed -n '2,14p' "$0"; exit 1; }
+while getopts "c:v:s:u:m:e:t:S:h" o; do case "$o" in
   c) COURSE="$OPTARG";; v) VAULT="$OPTARG";; s) SRC="$OPTARG";;
   u) UNIT="$OPTARG";; m) MATH="$OPTARG";; e) TERMS="$OPTARG";; t) TYPES="$OPTARG";;
+  S) SCAFFOLD="$OPTARG";;
   *) usage;; esac; done
 [ -z "$COURSE" ] || [ -z "$VAULT" ] || [ -z "$SRC" ] && { echo "missing -c/-v/-s"; usage; }
 [ -e "$VAULT" ] && { echo "ERROR: '$VAULT' already exists — aborting."; exit 1; }
@@ -59,6 +62,11 @@ keep_english_terms: "$TERMS"
 math: "$MATH"
 created: "$TODAY"
 EOF
+
+if [ -n "$SCAFFOLD" ]; then
+  if [ -e "$SCAFFOLD" ]; then echo "→ sources scaffold skipped ('$SCAFFOLD' 이미 존재)"
+  else cp -R "$REPO/sources-skeleton" "$SCAFFOLD"; echo "→ sources scaffold: $SCAFFOLD (textbook/readings/slides/notes-raw/notes-clean/hw/exams)"; fi
+fi
 
 echo
 echo "✅ done: $VAULT"
