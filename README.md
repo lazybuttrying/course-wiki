@@ -1,7 +1,5 @@
 # Course-Wiki Harness 🎓📚
 
-**English**: README.md (this doc) · **한국어**: [README.ko.md](README.ko.md)
-
 A reusable, course-agnostic template for organizing course material (textbooks, slides, papers, lecture notes) into an **LLM-maintained wiki**.
 It follows Andrej Karpathy's [**LLM Wiki**](https://gist.github.com/karpathy/442a6bf555914893e9891c11519de94f) pattern — instead of re-retrieving everything each time like RAG, the LLM **incrementally builds and maintains an interlinked markdown wiki**. The structure was validated on an ODE course, then generalized into a subject-agnostic template. Subject-general by default, with optional math/figure modules.
 
