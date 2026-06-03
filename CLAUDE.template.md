@@ -68,12 +68,13 @@
 | 주교재 (main text) | `sources/textbook/` | chapter 대표 `source:`, 정의·정리의 **authoritative 기준**(교차검증의 진실값) |
 | 부교재·리딩 | `sources/readings/` | 보조 출처(다른 관점·증명); concept/topic에서 인용 |
 | 강의자료 (slides) | `sources/slides/` | **단위(chapter) 구조의 기준** → `chapters/`와 1:1; 도식은 크롭→`attachments/` |
+| 강의 속기록 (transcript) | `sources/transcripts/` | **강의 발화 일차기록** — 슬라이드가 빠뜨린 설명·강조·예시·직관. 강조점→`summary/`, 교수 예시→`topics/` |
 | 필기 (원본 스캔) | `sources/notes-raw/` | 이미지 `attachments/`로 복사 → `topics/`에 `![[..]]` 임베드 |
 | 필기정리본 | `sources/notes-clean/` | **1차 ingest 콘텐츠**(가장 빠름) → 교재로 검증 |
 | 과제·문제집 (hw) | `sources/hw/` | 연습 문제·풀이 → `topics/`(풀이 유형)·Query; 무엇을 연습할지 |
 | 족보·기출 | `sources/exams/` | 콘텐츠 X, **강조점·평가 신호** → `summary/`·`topics/`·Query |
 
-- **authority(충돌 시 우선)**: 강의자료 > 필기정리본 > 주교재 > 족보. (시험·평가가 강의 기준이라 강의자료가 최우선) 충돌은 `> ⚠️ conflict: …〔src1〕 vs …〔src2〕`로 표시 + `log.md` 등록 (contradiction-flagging ON일 때).
+- **authority(충돌 시 우선)**: 강의자료(slides·transcript) > 필기정리본 > 주교재 > 족보. (시험·평가가 강의 기준이라 강의자료가 최우선; transcript는 발화 그대로라 강조·의도 파악에 특히 유용) 충돌은 `> ⚠️ conflict: …〔src1〕 vs …〔src2〕`로 표시 + `log.md` 등록 (contradiction-flagging ON일 때).
 - **인용**: chapter frontmatter `source:`는 대표 1개(주교재 또는 slides), 본문은 `〔부교재 §x〕`·`〔필기 p.y〕`로 나머지.
 - 폴더 골격은 harness `sources-skeleton/` (`bootstrap.sh -S <dir>`로 vault 옆에 생성). 이미 자료가 있으면 기존 폴더명을 그대로 써도 됨(예: `course_files_export/`).
 
