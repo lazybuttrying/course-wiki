@@ -14,7 +14,7 @@ Andrej Karpathy의 [**LLM Wiki**](https://gist.github.com/karpathy/442a6bf555914
 | `template-vault/_templates/` | **페이지 스켈레톤** (chapter·concept·topic·cheatsheet). 새 페이지 만들 때 복사. |
 | `scripts/lint.py` | 위키 health-check (끊긴 링크·orphan·back-link 비대칭·frontmatter·용어). `--report`로 md 출력. |
 | `scripts/crop-figures.md` | PDF 그림 크롭→임베드 레시피 (STEM/PDF 옵션). |
-| `sources-skeleton/` | 원자료 폴더 골격 (textbook·readings·slides·notes-raw·notes-clean·hw·exams + 배치 가이드). `bootstrap.sh -S`로 vault 옆에 생성. |
+| `sources-skeleton/` | 원자료 폴더 골격 (textbook·readings·slides·transcripts·notes-raw·notes-clean·hw·exams + 배치 가이드). `bootstrap.sh -S`로 vault 옆에 생성. |
 | `wiki.config.example.yml` | 수업 설정 예시. |
 | `.github/workflows/lint.yml` | CI — push/PR마다 lint + bootstrap 스모크 테스트. |
 

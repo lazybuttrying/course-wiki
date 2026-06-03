@@ -5,7 +5,7 @@
 course: "Causal Inference"          # 수업 이름 (= {{COURSE}})
 vault: "Causality-wiki"             # vault 폴더명 (= {{VAULT}})
 source_dirs: "../../course_files_export/"   # immutable 소스 경로 (= {{SOURCE_DIRS}})
-source_types: "lecture slides · 필기 · 본인 정리"   # 소스 형태 (= {{SOURCE_TYPES}})
+source_types: "lecture slides · 강의 속기록 · 필기 · 본인 정리"   # 소스 형태 (= {{SOURCE_TYPES}})
 unit: "lecture"                     # chapter | week | lecture | module | paper (= {{UNIT}})
 keep_english_terms: "on"            # 기술 용어 English 원단어 유지 (= {{KEEP_ENGLISH_TERMS}})
 math: "on"                          # LaTeX 수식 모듈 (= {{MATH}})
@@ -13,4 +13,4 @@ math: "on"                          # LaTeX 수식 모듈 (= {{MATH}})
 # 예시 bootstrap 호출:
 #   ./bootstrap.sh -c "Causal Inference" -v ../class/causality/wiki/Causality-wiki \
 #                  -s "../../course_files_export/" -u lecture -m on -e on \
-#                  -t "lecture slides · 필기 · 본인 정리"
+#                  -t "lecture slides · 강의 속기록 · 필기 · 본인 정리"

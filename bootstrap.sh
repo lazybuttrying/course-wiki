@@ -4,7 +4,7 @@
 #   ./bootstrap.sh -c "Causal Inference" -v ../class/causality/wiki/Causality-wiki \
 #                  -s "../../course_files_export/" -u lecture -m on -e on
 #   (optional) -S ../class/causality/sources   # vault 옆에 sources/ 골격 생성
-#                  → textbook/readings/slides/notes-raw/notes-clean/hw/exams
+#                  → textbook/readings/slides/transcripts/notes-raw/notes-clean/hw/exams
 #
 # Copies template-vault → <vault>, generates CLAUDE.md from CLAUDE.template.md
 # (strips the BOOTSTRAP block), substitutes {{placeholders}} in the meta files,
@@ -65,7 +65,7 @@ EOF
 
 if [ -n "$SCAFFOLD" ]; then
   if [ -e "$SCAFFOLD" ]; then echo "→ sources scaffold skipped ('$SCAFFOLD' 이미 존재)"
-  else cp -R "$REPO/sources-skeleton" "$SCAFFOLD"; echo "→ sources scaffold: $SCAFFOLD (textbook/readings/slides/notes-raw/notes-clean/hw/exams)"; fi
+  else cp -R "$REPO/sources-skeleton" "$SCAFFOLD"; echo "→ sources scaffold: $SCAFFOLD (textbook/readings/slides/transcripts/notes-raw/notes-clean/hw/exams)"; fi
 fi
 
 echo
