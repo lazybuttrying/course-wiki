@@ -11,3 +11,6 @@ Thumbs.db
 # scratch
 /tmp/
 *.tmp
+
+# Claude Code harness logs
+.claude-logs/

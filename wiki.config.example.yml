@@ -1,16 +1,16 @@
-# wiki.config.example.yml — 새 수업 설정 예시.
-# bootstrap.sh 가 vault에 wiki.config.yml 을 자동 생성하지만,
-# 플래그 대신 이 파일을 채워두고 참고용으로 쓸 수도 있다.
+# wiki.config.example.yml — example config for a new course.
+# bootstrap.sh auto-generates wiki.config.yml in the vault, but you can also
+# fill this file in and keep it as a reference.
 
-course: "Causal Inference"          # 수업 이름 (= {{COURSE}})
-vault: "Causality-wiki"             # vault 폴더명 (= {{VAULT}})
-source_dirs: "../../course_files_export/"   # immutable 소스 경로 (= {{SOURCE_DIRS}})
-source_types: "lecture slides · 강의 속기록 · 필기 · 본인 정리"   # 소스 형태 (= {{SOURCE_TYPES}})
+course: "Causal Inference"          # course name (= {{COURSE}})
+vault: "Causality-wiki"             # vault folder name (= {{VAULT}})
+source_dirs: "../../course_files_export/"   # immutable source path (= {{SOURCE_DIRS}})
+source_types: "lecture slides · transcripts · handwritten notes · cleaned-up notes"   # source forms (= {{SOURCE_TYPES}})
 unit: "lecture"                     # chapter | week | lecture | module | paper (= {{UNIT}})
-keep_english_terms: "on"            # 기술 용어 English 원단어 유지 (= {{KEEP_ENGLISH_TERMS}})
-math: "on"                          # LaTeX 수식 모듈 (= {{MATH}})
+keep_english_terms: "on"            # keep technical terms as their original English (= {{KEEP_ENGLISH_TERMS}})
+math: "on"                          # LaTeX math module (= {{MATH}})
 
-# 예시 bootstrap 호출:
+# Example bootstrap call:
 #   ./bootstrap.sh -c "Causal Inference" -v ../class/causality/wiki/Causality-wiki \
 #                  -s "../../course_files_export/" -u lecture -m on -e on \
-#                  -t "lecture slides · 강의 속기록 · 필기 · 본인 정리"
+#                  -t "lecture slides · transcripts · handwritten notes · cleaned-up notes"

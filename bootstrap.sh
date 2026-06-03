@@ -3,7 +3,7 @@
 #
 #   ./bootstrap.sh -c "Causal Inference" -v ../class/causality/wiki/Causality-wiki \
 #                  -s "../../course_files_export/" -u lecture -m on -e on
-#   (optional) -S ../class/causality/sources   # vault 옆에 sources/ 골격 생성
+#   (optional) -S ../class/causality/sources   # create a sources/ skeleton next to the vault
 #                  → textbook/readings/slides/transcripts/notes-raw/notes-clean/hw/exams
 #
 # Copies template-vault → <vault>, generates CLAUDE.md from CLAUDE.template.md
@@ -64,13 +64,13 @@ created: "$TODAY"
 EOF
 
 if [ -n "$SCAFFOLD" ]; then
-  if [ -e "$SCAFFOLD" ]; then echo "→ sources scaffold skipped ('$SCAFFOLD' 이미 존재)"
+  if [ -e "$SCAFFOLD" ]; then echo "→ sources scaffold skipped ('$SCAFFOLD' already exists)"
   else cp -R "$REPO/sources-skeleton" "$SCAFFOLD"; echo "→ sources scaffold: $SCAFFOLD (textbook/readings/slides/transcripts/notes-raw/notes-clean/hw/exams)"; fi
 fi
 
 echo
 echo "✅ done: $VAULT"
 echo "next:"
-echo "  1) 소스를 $SRC 에 두고(immutable) 확인"
-echo "  2) LLM에게: \"$VAULT/CLAUDE.md 스키마대로 <소스>를 ingest 해줘\""
+echo "  1) put your sources in $SRC (immutable) and verify"
+echo "  2) tell the LLM: \"ingest <sources> per the $VAULT/CLAUDE.md schema\""
 echo "  3) lint:  python3 \"$REPO/scripts/lint.py\" \"$VAULT\""

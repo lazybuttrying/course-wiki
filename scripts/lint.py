@@ -58,7 +58,7 @@ def main():
     canon = lambda t: alias2file.get(t, t)
 
     wl = re.compile(r"(!?)\[\[([^\]|#]+)(?:#[^\]|]*)?(?:\|[^\]]*)?\]\]")
-    SKIP = {"링크", "페이지명", "create a link", "name", "<page>", "<Unit> - <Title>",
+    SKIP = {"link", "page name", "create a link", "name", "<page>", "<Unit> - <Title>",
             "<Concept>", "<Topic>"}
     links, broken, broken_img, inbound = {}, set(), set(), {}
     for p in md:
@@ -125,7 +125,7 @@ def main():
         for ln in open(p, encoding="utf-8"):
             low = ln.lower()
             if ("open question" in low or "conflict" in low or "❓" in ln or "⚠️" in ln) \
-               and "형식:" not in ln and "format" not in low:
+               and "format" not in low:
                 emit(f"  {base(p)}: {ln.strip()[:90]}"); found = True
     if not found: emit("  none")
 

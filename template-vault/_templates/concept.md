@@ -1,30 +1,30 @@
 ---
 tags: [{{COURSE}}, concept, {{topic-tag}}]
-aliases: ["{{Concept}}", "{{영문 별칭}}", "{{기호/약어}}"]
+aliases: ["{{Concept}}", "{{English alias}}", "{{symbol/abbrev}}"]
 type: concept
 updated: {{YYYY-MM-DD}}
 ---
 
 # Concept — {{Concept}}
 
-> {{unit}} 횡단 개념. {{한 줄: 왜 중요한가}}. 정의·예제는 [[{{U}}{{N}} - …]].
+> Cross-{{unit}} concept. {{one line: why it matters}}. Definitions/examples in [[{{U}}{{N}} - …]].
 
-## 정의
-- {{핵심 정의 — 수식 $...$}}
+## Definition
+- {{core definition — math $...$}}
 
-## 핵심 사실
-- {{헷갈리기 쉬운 점·방향·반례}}
+## Key facts
+- {{easy-to-confuse points · direction · counterexamples}}
 
-## 어디서 쓰이나 (한 개념, 여러 등장)
-- [[{{U}}{{a}} - …]]: {{이 단위에서 어떻게 쓰이나}}
+## Where it's used (one concept, many appearances)
+- [[{{U}}{{a}} - …]]: {{how it's used in this unit}}
 - [[{{U}}{{b}} - …]]: {{…}}
-- [[{{다른 Concept}}]]: {{연결}}
+- [[{{other Concept}}]]: {{connection}}
 
-## 관련 노트
-[[{{다른 Concept}}]] · [[Cheat Sheet]] · [[index]]
+## Related Notes
+[[{{other Concept}}]] · [[Cheat Sheet]] · [[index]]
 
 <!--
-사용법: concepts/ 로 복사 → "{{Concept}}.md". basename은 vault 내 고유해야 한다
-(chapter/topic 와 같은 이름 금지, alias 충돌 금지). 여기서 링크한 각 챕터의
-"## 관련 노트"에도 이 concept를 역링크할 것(lint가 비대칭을 잡는다).
+Usage: copy into concepts/ → "{{Concept}}.md". The basename must be unique within the
+vault (no name clashes with a chapter/topic, no alias clashes). In each chapter you link
+here, back-link this concept from its "## Related Notes" too (lint catches asymmetry).
 -->

@@ -6,7 +6,7 @@ updated: YYYY-MM-DD
 
 # Welcome
 
-이 볼트는 **{{COURSE}} Wiki** 입니다. 홈으로: [[index]]
+This vault is the **{{COURSE}} Wiki**. Go home: [[index]]
 
-- 스키마/유지 규칙: [[CLAUDE]]
-- 변경 로그: [[log]]
+- Schema / maintenance rules: [[CLAUDE]]
+- Changelog: [[log]]
